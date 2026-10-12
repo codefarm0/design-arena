@@ -1,0 +1,126 @@
+### Java ###
+*.class
+*.ctxt
+hs_err_pid*
+replay_pid*
+.mtj.tmp/
+
+# Package / archive files
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+!gradle/wrapper/gradle-wrapper.jar
+
+### Gradle ###
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.properties
+gradle-app.setting
+
+### Maven (stale output dir) ###
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+release.properties
+
+### Node / frontend ###
+node_modules/
+.npm/
+.pnp.*
+.yarn/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+### Vaadin (generated at build time) ###
+src/main/frontend/generated/
+vite.generated.ts
+# NOTE: src/main/bundles/ (dev.bundle, prod.bundle) is intentionally committed --
+# Vaadin recommends it so other developers/CI need not recompile the frontend.
+.vaadin/
+
+### Spring Boot ###
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### Logs & temp ###
+*.log
+logs/
+*.tmp
+*.bak
+*.pid
+*.seed
+*.swp
+*~
+
+### Secrets / local config ###
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.jks
+*.keystore
+application-local.properties
+application-local.yml
+application-local.yaml
+# ...except the checked-in local dev profile: it holds no credentials, only the
+# Docker Compose / Ollama wiring every developer needs.
+!src/main/resources/application-local.yaml
+application-secrets.properties
+*secret*.properties
+*secret*.yaml
+
+### Databases ###
+*.db
+*.sqlite
+*.sqlite3
+*.h2.db
+*.mv.db
+*.trace.db
+
+### IDEs ###
+# IntelliJ IDEA
+.idea/
+*.iml
+*.ipr
+*.iws
+out/
+# Eclipse
+.classpath
+.project
+.settings/
+bin/
+.apt_generated/
+.factorypath
+.springBeans
+.sts4-cache
+# NetBeans
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+# VS Code
+.vscode/
+*.code-workspace
+
+### OS ###
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+### Tooling / local agent state ###
+.claude/settings.local.json

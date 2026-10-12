@@ -1,0 +1,31 @@
+# Paid provider and a managed database. Every value comes from the environment;
+# nothing here is a secret.
+spring:
+  docker:
+    compose:
+      enabled: false
+  datasource:
+    url: ${DATABASE_URL}
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
+  ai:
+    # openai | anthropic — switching provider is this one variable, no code change.
+    model:
+      chat: ${DESIGNARENA_AI_PROVIDER:openai}
+    openai:
+      api-key: ${OPENAI_API_KEY:}
+      # Point this at any OpenAI-compatible endpoint (Groq, Together, OpenRouter).
+      base-url: ${OPENAI_BASE_URL:https://api.openai.com}
+      chat:
+        options:
+          model: ${OPENAI_CHAT_MODEL:gpt-4.1-mini}
+          temperature: 0.2
+    anthropic:
+      api-key: ${ANTHROPIC_API_KEY:}
+      chat:
+        options:
+          model: ${ANTHROPIC_CHAT_MODEL:claude-sonnet-4-5}
+          temperature: 0.2
+
+vaadin:
+  launch-browser: false

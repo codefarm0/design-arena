@@ -1,0 +1,72 @@
+# Every backing service Design Arena needs for local development.
+# `./gradlew bootRun` starts this file through Spring Boot's Docker Compose support,
+# waits for both services to report healthy, and wires the connection details into the
+# application, so there is nothing to configure by hand.
+name: design-arena
+
+services:
+
+  postgres:
+    # Pinned so every machine and CI run gets the same database engine.
+    image: postgres:18.6-alpine
+    environment:
+      POSTGRES_DB: designarena
+      POSTGRES_USER: designarena
+      # Local-container credential only. This database is disposable and is never
+      # reachable outside this compose project; real environments inject their own.
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-designarena}
+    ports:
+      - '5432:5432'
+    volumes:
+      # Named volume, so seed data and migration history survive a container restart.
+      # Postgres 18 expects the mount one level above the data directory, so that a
+      # future major-version upgrade can use `pg_upgrade --link` across the same mount.
+      - postgres-data:/var/lib/postgresql
+    healthcheck:
+      # Boot blocks startup until this passes, which removes the
+      # "connection refused on first run" race entirely.
+      test: ['CMD-SHELL', 'pg_isready -U designarena -d designarena']
+      interval: 5s
+      timeout: 3s
+      retries: 12
+      start_period: 10s
+
+  # Note for macOS: a container cannot reach the Mac's GPU, so this runs the model on
+  # CPU and a review takes minutes rather than seconds. That is fine for development and
+  # is why every model call in this application is asynchronous. For a faster loop, run
+  # Ollama natively on the host instead and point the app at it:
+  #   brew install ollama && ollama serve
+  #   SPRING_AI_OLLAMA_BASE_URL=http://localhost:11434 ./gradlew bootRun
+  ollama:
+    image: ollama/ollama:0.40.3
+    environment:
+      # The model the app expects by default. Keep in sync with
+      # spring.ai.ollama.chat.options.model in application-local.yaml.
+      DESIGNARENA_MODEL: llama3.1:8b
+    ports:
+      - '11434:11434'
+    volumes:
+      # ~5GB of model weights. Keeping them in a volume means the download
+      # happens once per machine, not once per container.
+      - ollama-models:/root/.ollama
+    # Serve immediately, then pull the model in the background. The container is
+    # healthy as soon as the API answers, so app startup is not held hostage to a
+    # multi-gigabyte download; the first AI call simply waits for the model instead.
+    entrypoint: ['/bin/sh', '-c']
+    command:
+      - |
+        /bin/ollama serve &
+        serve_pid=$$!
+        until /bin/ollama list >/dev/null 2>&1; do sleep 1; done
+        /bin/ollama pull "$$DESIGNARENA_MODEL" || echo "Model pull failed; run 'docker compose exec ollama ollama pull $$DESIGNARENA_MODEL' to retry."
+        wait $$serve_pid
+    healthcheck:
+      test: ['CMD', '/bin/ollama', 'list']
+      interval: 5s
+      timeout: 5s
+      retries: 12
+      start_period: 5s
+
+volumes:
+  postgres-data:
+  ollama-models:

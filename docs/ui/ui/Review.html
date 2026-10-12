@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Design review</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&amp;family=IBM+Plex+Sans:wght@400;500;600;700&amp;display=swap">
+<style>
+body{margin:0;background:#F5F6F8}
+a{color:#0E6B5C}a:hover{color:#0A5246}
+</style>
+</helmet>
+<div style="min-height: 100vh; background: #F5F6F8; color: #14161B; font-family: 'IBM Plex Sans', system-ui, sans-serif; font-size: 16px; line-height: 1.5">
+  <header style="background: #FFFFFF; border-bottom: 1px solid #DDE1E7">
+    <div style="max-width: 1120px; margin: 0 auto; padding: 14px 24px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px">
+      <a href="Main.dc.html" style="display: flex; align-items: center; gap: 10px; text-decoration: none; color: #14161B">
+        <svg width="28" height="28" viewBox="0 0 28 28" aria-hidden="true"><rect x="1" y="1" width="26" height="26" rx="6" fill="#0E6B5C"></rect><path d="M8 10h5v5H8zM15 13h5v5h-5zM13 12.5h2M10.5 15v4h4.5" stroke="#FFFFFF" stroke-width="1.6" fill="none"></path></svg>
+        <span style="font-weight: 700; font-size: 18px; letter-spacing: -0.01em">Design Arena</span>
+      </a>
+      <a href="Main.dc.html" style="font-size: 15px; color: #555B66; text-decoration: none">Back to problems</a>
+    </div>
+  </header>
+
+  <main style="max-width: 1120px; margin: 0 auto; padding: 40px 24px 64px; display: flex; flex-direction: column; gap: 24px">
+    <div style="display: flex; flex-direction: column; gap: 6px">
+      <span style="font-size: 14px; color: #555B66">Design a Rate Limiter · Design review</span>
+      <h1 style="margin: 0; font-size: 32px; letter-spacing: -0.02em; font-weight: 700">Your design review</h1>
+    </div>
+
+    <sc-if value="{{isReviewing}}" hint-placeholder-val="{{false}}">
+      <section role="status" style="background: #FFFFFF; border: 1px solid #DDE1E7; border-radius: 12px; padding: 48px 24px; display: flex; flex-direction: column; align-items: center; gap: 14px; text-align: center">
+        <svg width="40" height="40" viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="16" stroke="#DDE1E7" stroke-width="4" fill="none"></circle><path d="M20 4a16 16 0 0 1 16 16" stroke="#0E6B5C" stroke-width="4" fill="none" stroke-linecap="round"></path></svg>
+        <strong style="font-size: 20px">Reviewing your design…</strong>
+        <span style="color: #555B66; max-width: 460px">Checking it against 7 rubric dimensions. This usually takes a minute or two. You can leave; the result will be in History.</span>
+      </section>
+    </sc-if>
+
+    <sc-if value="{{isFailed}}" hint-placeholder-val="{{false}}">
+      <section role="alert" style="background: #FDECEA; border: 1px solid #F3C4BE; border-radius: 12px; padding: 24px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px">
+        <div style="display: flex; flex-direction: column; gap: 4px">
+          <strong style="font-size: 17px; color: #8A1C12">The review didn't finish</strong>
+          <span style="color: #5C1A13">The model returned a response we couldn't read, even after retrying. Your design is saved.</span>
+        </div>
+        <button style="font: inherit; font-weight: 600; min-height: 44px; padding: 0 20px; border-radius: 8px; border: 0; background: #B42318; color: #FFFFFF; cursor: pointer">Retry review</button>
+      </section>
+    </sc-if>
+
+    <sc-if value="{{isDone}}" hint-placeholder-val="{{true}}">
+      <div style="display: flex; flex-direction: column; gap: 24px">
+        <section style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px">
+          <div style="background: #FFFFFF; border: 1px solid #DDE1E7; border-radius: 12px; padding: 24px; display: flex; flex-direction: column; gap: 8px">
+            <span style="font-size: 14px; color: #555B66">Overall</span>
+            <div style="display: flex; align-items: baseline; gap: 6px">
+              <span style="font-size: 64px; font-weight: 700; line-height: 1; letter-spacing: -0.03em">6.5</span>
+              <span style="font-size: 24px; color: #555B66">/ 10</span>
+            </div>
+            <span style="font-size: 15px; color: #2A2E35">Solid core design. Failure handling and trade-offs need depth to reach staff level.</span>
+          </div>
+          <div style="background: #FFFFFF; border: 1px solid #DDE1E7; border-radius: 12px; padding: 24px; display: flex; flex-direction: column; gap: 12px">
+            <span style="font-size: 14px; color: #555B66">By rubric dimension</span>
+            <sc-for list="{{dims}}" as="d" hint-placeholder-count="7">
+              <div style="display: grid; grid-template-columns: minmax(0, 1fr) 120px 40px; align-items: center; gap: 12px; font-size: 14px">
+                <span>{{d.name}}</span>
+                <div style="height: 8px; border-radius: 999px; background: #E8EBEF; overflow: hidden"><div style="{{d.bar}}"></div></div>
+                <span style="font-family: 'IBM Plex Mono', monospace; text-align: right">{{d.score}}</span>
+              </div>
+            </sc-for>
+          </div>
+        </section>
+
+        <section style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px">
+          <sc-for list="{{groups}}" as="g" hint-placeholder-count="4">
+            <div style="background: #FFFFFF; border: 1px solid #DDE1E7; border-radius: 12px; padding: 24px; display: flex; flex-direction: column; gap: 12px">
+              <div style="display: flex; align-items: center; gap: 10px">
+                <span style="{{g.dot}}" aria-hidden="true"></span>
+                <h2 style="margin: 0; font-size: 18px; font-weight: 600">{{g.title}}</h2>
+              </div>
+              <ul style="margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 8px; font-size: 15px; color: #2A2E35">
+                <sc-for list="{{g.items}}" as="it" hint-placeholder-count="3">
+                  <li>{{it}}</li>
+                </sc-for>
+              </ul>
+            </div>
+          </sc-for>
+        </section>
+
+        <details style="background: #FFFFFF; border: 1px solid #DDE1E7; border-radius: 12px; padding: 0 24px">
+          <summary style="cursor: pointer; padding: 18px 0; font-weight: 600; min-height: 24px">Your submission</summary>
+          <pre style="margin: 0 0 20px; padding: 16px; border-radius: 8px; background: #F5F6F8; font-family: 'IBM Plex Mono', monospace; font-size: 13px; line-height: 1.6; white-space: pre-wrap">## High-level design
+Token bucket in Redis, checked by a gateway filter...</pre>
+        </details>
+
+        <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px">
+          <span style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: #555B66">Reviewed by llama3.1:8b via Ollama · prompt v1</span>
+          <div style="display: flex; flex-wrap: wrap; gap: 12px">
+            <a href="Editor.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 18px; border-radius: 8px; border: 1px solid #C9CED6; color: #14161B; text-decoration: none; font-weight: 500">Revise and resubmit</a>
+            <a href="Main.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 20px; border-radius: 8px; background: #0E6B5C; color: #FFFFFF; text-decoration: none; font-weight: 600">Try another problem</a>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"status":{"editor":"enum","options":["done","reviewing","failed"],"default":"done"},"$preview":{"width":1280,"height":1420}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const status = this.props.status ?? 'done';
+    const bar = (s) => 'width: ' + (s * 10) + '%; height: 100%; border-radius: 999px; background: ' + (s >= 7 ? '#0E6B5C' : s >= 5 ? '#6B7280' : '#B45309');
+    const dot = (c) => 'width: 10px; height: 10px; border-radius: 999px; background: ' + c + '; flex-shrink: 0';
+    const dims = [
+      ['Requirements & estimation', 7], ['API & data model', 7], ['High-level architecture', 8],
+      ['Scalability & performance', 7], ['Reliability & failure modes', 4], ['Trade-offs & justification', 5],
+      ['Rate-limiter must-haves', 6]
+    ];
+    return {
+      isDone: status === 'done',
+      isReviewing: status === 'reviewing',
+      isFailed: status === 'failed',
+      dims: dims.map(([name, s]) => ({ name, score: String(s), bar: bar(s) })),
+      groups: [
+        { title: 'What you did well', dot: dot('#0E6B5C'), items: [
+          'Token bucket is a good fit: it allows short bursts while holding the average rate.',
+          'Shared Redis with atomic operations keeps one consistent count across servers.',
+          'Returning 429 with Retry-After gives clients a clear back-off signal.'
+        ] },
+        { title: "What's wrong or risky", dot: dot('#B42318'), items: [
+          'Every request makes a Redis round trip, which adds latency on the hot path.',
+          'A single Redis instance is a single point of failure for all API traffic.'
+        ] },
+        { title: "What's missing", dot: dot('#B45309'), items: [
+          'What happens when Redis is unavailable: fail open or fail closed, and why.',
+          'Capacity estimate: memory needed for 10M users × endpoints.',
+          'How limit rules are configured and rolled out without a deploy.'
+        ] },
+        { title: 'Follow-up questions', dot: dot('#3A3F48'), items: [
+          'How would you rate limit across two data centres?',
+          'How do you stop one noisy tenant from exhausting Redis?',
+          'How would you test that the limiter holds under 5k RPS?'
+        ] }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

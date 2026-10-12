@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Quiz question</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&amp;family=IBM+Plex+Sans:wght@400;500;600;700&amp;display=swap">
+<style>
+body{margin:0;background:#F5F6F8}
+a{color:#0E6B5C}a:hover{color:#0A5246}
+</style>
+</helmet>
+<div style="min-height: 100vh; background: #F5F6F8; color: #14161B; font-family: 'IBM Plex Sans', system-ui, sans-serif; font-size: 16px; line-height: 1.5">
+  <header style="background: #FFFFFF; border-bottom: 1px solid #DDE1E7">
+    <div style="max-width: 1120px; margin: 0 auto; padding: 14px 24px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px">
+      <a href="Main.dc.html" style="display: flex; align-items: center; gap: 10px; text-decoration: none; color: #14161B">
+        <svg width="28" height="28" viewBox="0 0 28 28" aria-hidden="true"><rect x="1" y="1" width="26" height="26" rx="6" fill="#0E6B5C"></rect><path d="M8 10h5v5H8zM15 13h5v5h-5zM13 12.5h2M10.5 15v4h4.5" stroke="#FFFFFF" stroke-width="1.6" fill="none"></path></svg>
+        <span style="font-weight: 700; font-size: 18px; letter-spacing: -0.01em">Design Arena</span>
+      </a>
+      <a href="Main.dc.html" style="font-size: 15px; color: #555B66; text-decoration: none">Exit quiz</a>
+    </div>
+  </header>
+
+  <main style="max-width: 760px; margin: 0 auto; padding: 40px 24px 64px; display: flex; flex-direction: column; gap: 28px">
+    <div style="display: flex; flex-direction: column; gap: 10px">
+      <div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; font-size: 14px; color: #555B66">
+        <span>Design a Rate Limiter · Quiz</span>
+        <span style="font-family: 'IBM Plex Mono', monospace">Question 4 of 10</span>
+      </div>
+      <div role="progressbar" aria-label="Quiz progress" aria-valuenow="4" aria-valuemin="0" aria-valuemax="10" style="height: 8px; border-radius: 999px; background: #DDE1E7; overflow: hidden">
+        <div style="width: 40%; height: 100%; background: #0E6B5C; border-radius: 999px"></div>
+      </div>
+    </div>
+
+    <section style="background: #FFFFFF; border: 1px solid #DDE1E7; border-radius: 12px; padding: 32px; display: flex; flex-direction: column; gap: 20px">
+      <div style="display: flex; flex-wrap: wrap; gap: 8px">
+        <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 500; padding: 4px 10px; border-radius: 999px; background: #EEF0F3; color: #3A3F48">CONSISTENCY</span>
+        <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 500; padding: 4px 10px; border-radius: 999px; background: #EEF0F3; color: #3A3F48">SINGLE CHOICE</span>
+      </div>
+      <h1 style="margin: 0; font-size: 24px; line-height: 1.35; font-weight: 600">Your rate limiter runs on 20 API servers. Where should the request counters live so limits hold across all of them?</h1>
+
+      <fieldset style="border: 0; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px">
+        <legend style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Choose one answer</legend>
+        <sc-for list="{{options}}" as="o" hint-placeholder-count="4">
+          <label onClick="{{o.pick}}" style="{{o.style}}">
+            <input type="radio" name="q4" checked="{{o.selected}}" style="width: 20px; height: 20px; margin: 2px 0 0; accent-color: #0E6B5C; flex-shrink: 0">
+            <span style="display: flex; flex-direction: column; gap: 2px">
+              <span style="font-weight: 600; font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: #555B66">{{o.key}}</span>
+              <span>{{o.text}}</span>
+            </span>
+          </label>
+        </sc-for>
+      </fieldset>
+    </section>
+
+    <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px">
+      <button style="font: inherit; font-weight: 500; min-height: 44px; padding: 0 18px; border-radius: 8px; border: 1px solid #C9CED6; background: #FFFFFF; color: #14161B; cursor: pointer">← Previous</button>
+      <div style="display: flex; flex-wrap: wrap; gap: 12px">
+        <button style="font: inherit; font-weight: 500; min-height: 44px; padding: 0 18px; border-radius: 8px; border: 0; background: transparent; color: #555B66; cursor: pointer">Skip</button>
+        <a href="QuizResults.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 20px; border-radius: 8px; background: #0E6B5C; color: #FFFFFF; text-decoration: none; font-weight: 600">Next →</a>
+      </div>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":860}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { picked: 'B' };
+  }
+  renderVals() {
+    const base = 'display: flex; gap: 14px; align-items: flex-start; padding: 16px 18px; border-radius: 10px; cursor: pointer; ';
+    const opts = [
+      { key: 'A', text: 'In-memory counters on each server' },
+      { key: 'B', text: 'A shared store such as Redis, updated with atomic increments' },
+      { key: 'C', text: 'A relational database row per user, updated on every request' },
+      { key: 'D', text: 'At the client, using a signed token that tracks usage' }
+    ];
+    return {
+      options: opts.map((o) => {
+        const selected = this.state.picked === o.key;
+        return {
+          ...o,
+          selected,
+          style: base + (selected ? 'border: 2px solid #0E6B5C; background: #E3F1EE;' : 'border: 1px solid #DDE1E7; background: #FFFFFF; margin: 1px;'),
+          pick: () => this.setState({ picked: o.key })
+        };
+      })
+    };
+  }
+}
+</script>
+</body>
+</html>

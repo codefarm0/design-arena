@@ -1,0 +1,31 @@
+# Local development: Postgres and Ollama come from compose.yaml, started by Boot itself.
+spring:
+  docker:
+    compose:
+      enabled: true
+      file: compose.yaml
+      # Containers keep running between app restarts, so a restart costs seconds
+      # rather than waiting for Postgres and Ollama to boot again.
+      lifecycle-management: start-only
+  ai:
+    # The single switch that chooses the provider. The OpenAI and Anthropic starters
+    # stay on the classpath but their auto-configuration is inactive, so the app
+    # starts with no paid API keys present.
+    model:
+      chat: ollama
+    ollama:
+      init:
+        # compose.yaml pulls the model in the background; the app must not block on it.
+        pull-model-strategy: never
+      chat:
+        options:
+          model: llama3.1:8b
+          # Low temperature: reviews and summaries should be consistent, not creative.
+          temperature: 0.2
+
+vaadin:
+  launch-browser: true
+
+logging:
+  level:
+    in.codefarm.designarena: DEBUG

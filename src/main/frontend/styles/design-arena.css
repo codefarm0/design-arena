@@ -1,0 +1,1256 @@
+/*
+ * Design Arena theme.
+ *
+ * Single source of truth for the design tokens taken from the approved mockups in
+ * docs/ui/ui/. No colour, font stack, radius or spacing value is written anywhere else:
+ * views reference these custom properties, so a design change happens in one file.
+ *
+ * Loaded with @CssImport from MainLayout. Vaadin 25 replaced the themes/<name> folder
+ * convention with plain stylesheet imports, so this file lives under src/main/frontend
+ * and Vite resolves the font URLs below at build time.
+ *
+ * Token reference: .claude/skills/java-enterprise/references/ui-contract.md
+ */
+
+/* --- Fonts ---------------------------------------------------------------
+ * Self-hosted, latin subset only. IBM Plex Sans ships as a variable font, so one
+ * file covers weights 400-700; Mono needs its two weights separately.
+ * Self-hosting keeps the app free of a third-party request on every page load.
+ */
+
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url('./fonts/ibm-plex-sans-var.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('./fonts/ibm-plex-mono-400.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('./fonts/ibm-plex-mono-500.woff2') format('woff2');
+}
+
+/* --- Tokens -------------------------------------------------------------- */
+
+html {
+  /* Colour */
+  --da-bg: #f5f6f8;
+  --da-surface: #ffffff;
+  --da-surface-muted: #fafbfc;
+  --da-border: #dde1e7;
+  --da-border-strong: #c9ced6;
+  --da-text: #14161b;
+  --da-text-body: #2a2e35;
+  --da-text-muted: #555b66;
+  --da-text-chip: #3a3f48;
+  --da-brand: #0e6b5c;
+  --da-brand-dark: #0a5246;
+  --da-brand-tint: #e3f1ee;
+  --da-brand-tint-text: #2f3a37;
+  --da-chip-bg: #eef0f3;
+  --da-track: #e8ebef;
+  --da-danger: #b42318;
+  --da-danger-bg: #fdecea;
+  --da-danger-border: #f3c4be;
+  --da-danger-text: #8a1c12;
+  --da-danger-text-soft: #5c1a13;
+  --da-warn: #b45309;
+  --da-neutral: #6b7280;
+
+  /* Type */
+  --da-font-sans: 'IBM Plex Sans', system-ui, sans-serif;
+  --da-font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+  --da-text-hero: 44px;
+  --da-text-page-title: 32px;
+  --da-text-question: 24px;
+  --da-text-section: 22px;
+  --da-text-card-title: 20px;
+  --da-text-lead: 18px;
+  --da-text-base: 16px;
+  --da-text-body-sm: 15px;
+  --da-text-meta: 14px;
+  --da-text-caption: 13px;
+  --da-text-chip-size: 12px;
+  --da-text-score: 64px;
+
+  /* Shape */
+  --da-radius-control: 8px;
+  --da-radius-option: 10px;
+  --da-radius-card: 12px;
+  --da-radius-pill: 999px;
+  --da-bar-height: 8px;
+
+  /* Space */
+  --da-gutter: 24px;
+  --da-space-2xs: 4px;
+  --da-space-xs: 8px;
+  --da-space-s: 12px;
+  --da-space-m: 16px;
+  --da-space-l: 20px;
+  --da-space-xl: 24px;
+  --da-space-2xl: 32px;
+  --da-space-3xl: 40px;
+  --da-space-4xl: 56px;
+  --da-space-5xl: 64px;
+
+  /* Container widths, one per screen, as specified in the mockups. */
+  --da-width-narrow: 760px;
+  --da-width-results: 960px;
+  --da-width-default: 1120px;
+  --da-width-wide: 1240px;
+
+  /* Minimum interactive target. An accessibility floor, not a style choice. */
+  --da-target: 44px;
+
+  /* Lumo overrides, so Vaadin's own components inherit the same design. */
+  --lumo-font-family: var(--da-font-sans);
+  --lumo-primary-color: var(--da-brand);
+  --lumo-primary-text-color: var(--da-brand);
+  --lumo-primary-contrast-color: var(--da-surface);
+  --lumo-error-color: var(--da-danger);
+  --lumo-body-text-color: var(--da-text);
+  --lumo-secondary-text-color: var(--da-text-muted);
+  --lumo-base-color: var(--da-surface);
+  --lumo-contrast-10pct: var(--da-border);
+  --lumo-border-radius-m: var(--da-radius-control);
+  --lumo-border-radius-l: var(--da-radius-card);
+}
+
+/* --- Base ---------------------------------------------------------------- */
+
+html,
+body {
+  background: var(--da-bg);
+  color: var(--da-text);
+  font-family: var(--da-font-sans);
+  font-size: var(--da-text-base);
+  line-height: 1.5;
+  margin: 0;
+}
+
+a {
+  color: var(--da-brand);
+}
+
+a:hover {
+  color: var(--da-brand-dark);
+}
+
+/* Visible focus is how keyboard users navigate. Never remove it. */
+:focus-visible {
+  outline: 2px solid var(--da-brand);
+  outline-offset: 2px;
+}
+
+/* --- Layout primitives --------------------------------------------------- */
+
+.da-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: var(--da-bg);
+}
+
+.da-header {
+  background: var(--da-surface);
+  border-bottom: 1px solid var(--da-border);
+}
+
+.da-header__inner {
+  width: 100%;
+  max-width: var(--da-width-default);
+  margin: 0 auto;
+  padding-inline: var(--da-gutter);
+  box-sizing: border-box;
+}
+
+/* <main> spans the page and centres the view inside it. The width belongs to the view,
+   because each screen in the mockups has its own. */
+.da-main {
+  width: 100%;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-inline: var(--da-gutter);
+  padding-top: var(--da-space-3xl);
+  padding-bottom: var(--da-space-5xl);
+  box-sizing: border-box;
+}
+
+.da-header__inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--da-space-m);
+  padding-block: 14px;
+}
+
+.da-wordmark {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: var(--da-text);
+}
+
+.da-wordmark__text {
+  font-weight: 700;
+  font-size: var(--da-text-lead);
+  letter-spacing: -0.01em;
+}
+
+.da-nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--da-space-xl);
+  font-size: var(--da-text-body-sm);
+}
+
+.da-nav__link {
+  color: var(--da-text-muted);
+  text-decoration: none;
+}
+
+.da-nav__link[data-current] {
+  color: var(--da-text);
+  font-weight: 600;
+}
+
+/* A nav entry rendered as a button element, so it can carry a disabled state while
+   still looking like the links beside it. */
+.da-nav__link--button {
+  background: none;
+  border: 0;
+  padding: 0;
+  font: inherit;
+  font-size: var(--da-text-body-sm);
+  cursor: pointer;
+}
+
+/* --- Text ---------------------------------------------------------------- */
+
+.da-eyebrow {
+  font-family: var(--da-font-mono);
+  font-size: var(--da-text-caption);
+  color: var(--da-brand);
+  letter-spacing: 0.04em;
+}
+
+.da-hero {
+  display: flex;
+  flex-direction: column;
+  gap: var(--da-space-s);
+  max-width: 720px;
+}
+
+.da-hero__title {
+  margin: 0;
+  font-size: var(--da-text-hero);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  font-weight: 700;
+}
+
+.da-hero__lead {
+  margin: 0;
+  font-size: var(--da-text-lead);
+  color: var(--da-text-muted);
+}
+
+.da-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--da-space-m);
+}
+
+.da-section__header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--da-space-s);
+}
+
+.da-section__title {
+  margin: 0;
+  font-size: var(--da-text-section);
+  font-weight: 600;
+}
+
+.da-meta {
+  font-size: var(--da-text-meta);
+  color: var(--da-text-muted);
+}
+
+/* --- Chip --------------------------------------------------------------- */
+
+.da-chip {
+  font-family: var(--da-font-mono);
+  font-size: var(--da-text-chip-size);
+  font-weight: 500;
+  padding: var(--da-space-2xs) 10px;
+  border-radius: var(--da-radius-pill);
+  background: var(--da-chip-bg);
+  color: var(--da-text-chip);
+  white-space: nowrap;
+}
+
+.da-chip--brand {
+  background: var(--da-brand-tint);
+  color: var(--da-brand-dark);
+}
+
+/* --- Cards -------------------------------------------------------------- */
+
+.da-card-grid {
+  display: grid;
+  /* auto-fit, so the catalogue reflows instead of overflowing on a narrow screen. */
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--da-space-l);
+}
+
+.da-card {
+  background: var(--da-surface);
+  border: 1px solid var(--da-border);
+  border-radius: var(--da-radius-card);
+  padding: var(--da-space-xl);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.da-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--da-space-s);
+}
+
+.da-card__title {
+  margin: 0;
+  font-size: var(--da-text-card-title);
+  font-weight: 600;
+}
+
+.da-card__blurb {
+  margin: 0;
+  color: var(--da-text-muted);
+  font-size: var(--da-text-body-sm);
+  flex-grow: 1;
+}
+
+.da-card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding-top: var(--da-space-2xs);
+}
+
+/* --- Buttons ------------------------------------------------------------ */
+
+.da-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--da-target);
+  padding-inline: var(--da-space-m);
+  border-radius: var(--da-radius-control);
+  font: inherit;
+  font-size: var(--da-text-body-sm);
+  text-decoration: none;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+.da-button--primary {
+  background: var(--da-brand);
+  color: var(--da-surface);
+  border: 1px solid var(--da-brand);
+  font-weight: 600;
+}
+
+.da-button--primary:hover {
+  background: var(--da-brand-dark);
+  border-color: var(--da-brand-dark);
+  color: var(--da-surface);
+}
+
+.da-button--secondary {
+  background: var(--da-surface);
+  color: var(--da-text);
+  border: 1px solid var(--da-border-strong);
+  font-weight: 500;
+}
+
+.da-button--secondary:hover {
+  background: var(--da-bg);
+  color: var(--da-text);
+}
+
+/* --- Banner ------------------------------------------------------------- */
+
+.da-banner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--da-space-m);
+  padding: var(--da-space-l) var(--da-space-xl);
+  border-radius: var(--da-radius-card);
+  background: var(--da-brand-tint);
+}
+
+.da-banner__text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--da-space-2xs);
+}
+
+.da-banner__title {
+  font-size: var(--da-text-base);
+  font-weight: 700;
+}
+
+.da-banner__detail {
+  font-size: var(--da-text-body-sm);
+  color: var(--da-brand-tint-text);
+}
+
+.da-banner__link {
+  font-weight: 600;
+}
+
+/* --- View container ------------------------------------------------------
+ * A routed view is a single child of <main>, so it carries its own vertical
+ * rhythm rather than relying on the gap between main's children.
+ */
+
+.da-view {
+  width: 100%;
+  max-width: var(--da-width-default);
+  display: flex;
+  flex-direction: column;
+  gap: var(--da-space-3xl);
+}
+
+/* One question at a time: a narrow column keeps the question readable. */
+.da-view--narrow {
+  max-width: var(--da-width-narrow);
+  gap: 28px;
+}
+
+.da-view--results {
+  max-width: var(--da-width-results);
+  gap: var(--da-space-xl);
+}
+
+.da-view--spacious {
+  padding-top: var(--da-space-m);
+}
+
+/* Actions for a flow that has not shipped yet keep their size and position, so the
+ * layout is final, but they are visibly and programmatically unavailable. */
+.da-button[disabled],
+.da-button[aria-disabled='true'] {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* ===========================================================================
+   Quiz
+   =========================================================================== */
+
+.da-progress {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.da-progress__labels {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--da-space-xs);
+  font-size: var(--da-text-meta);
+  color: var(--da-text-muted);
+}
+
+.da-progress__count {
+  font-family: var(--da-font-mono);
+}
+
+.da-progress__track {
+  height: var(--da-bar-height);
+  border-radius: var(--da-radius-pill);
+  background: var(--da-border);
+  overflow: hidden;
+}
+
+.da-progress__fill {
+  width: var(--da-bar-fill, 0%);
+  height: 100%;
+  border-radius: var(--da-radius-pill);
+  background: var(--da-brand);
+  transition: width 120ms ease-out;
+}
+
+.da-question {
+  background: var(--da-surface);
+  border: 1px solid var(--da-border);
+  border-radius: var(--da-radius-card);
+  padding: var(--da-space-2xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--da-space-l);
+}
+
+.da-chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--da-space-xs);
+}
+
+.da-question__text {
+  margin: 0;
+  font-size: var(--da-text-question);
+  line-height: 1.35;
+  font-weight: 600;
+}
+
+.da-options {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--da-space-s);
+}
+
+/* The legend is read by screen readers and seen by nobody: the question above it is the
+   visible label, but a fieldset without a legend is an unlabelled group. */
+.da-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.da-option {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  padding: var(--da-space-m) 18px;
+  border-radius: var(--da-radius-option);
+  border: 1px solid var(--da-border);
+  background: var(--da-surface);
+  /* Selecting thickens the border to 2px; the margin keeps the box from shifting. */
+  margin: 1px;
+  cursor: pointer;
+}
+
+.da-option:hover {
+  border-color: var(--da-border-strong);
+}
+
+.da-option--selected {
+  border: 2px solid var(--da-brand);
+  background: var(--da-brand-tint);
+  margin: 0;
+}
+
+.da-option__input {
+  width: 20px;
+  height: 20px;
+  margin: 2px 0 0;
+  accent-color: var(--da-brand);
+  flex-shrink: 0;
+}
+
+.da-option__body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.da-option__key {
+  font-weight: 600;
+  font-family: var(--da-font-mono);
+  font-size: var(--da-text-caption);
+  color: var(--da-text-muted);
+}
+
+.da-quiz-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--da-space-s);
+}
+
+.da-quiz-actions__right {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--da-space-s);
+}
+
+.da-button--ghost {
+  background: transparent;
+  border: 0;
+  color: var(--da-text-muted);
+  font-weight: 500;
+}
+
+.da-button--ghost:hover {
+  color: var(--da-text);
+}
+
+/* ===========================================================================
+   Quiz results
+   =========================================================================== */
+
+.da-page-heading {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.da-page-heading__title {
+  margin: 0;
+  font-size: var(--da-text-page-title);
+  letter-spacing: -0.02em;
+  font-weight: 700;
+}
+
+.da-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--da-space-l);
+}
+
+.da-score {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.da-score__value {
+  font-size: var(--da-text-score);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+
+.da-score__total {
+  font-size: var(--da-text-question);
+  color: var(--da-text-muted);
+}
+
+.da-bar-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.da-bar-row__labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--da-text-body-sm);
+}
+
+.da-bar-row__value {
+  font-family: var(--da-font-mono);
+}
+
+.da-bar {
+  height: var(--da-bar-height);
+  border-radius: var(--da-radius-pill);
+  background: var(--da-track);
+  overflow: hidden;
+}
+
+.da-bar__fill {
+  /* The percentage arrives as a custom property set by the component. */
+  width: var(--da-bar-fill, 0%);
+  height: 100%;
+  border-radius: var(--da-radius-pill);
+  background: var(--da-brand);
+}
+
+.da-card--flat {
+  gap: var(--da-space-s);
+}
+
+.da-card__heading-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.da-card__heading {
+  margin: 0;
+  font-size: var(--da-text-card-title);
+  font-weight: 600;
+}
+
+.da-prose {
+  margin: 0;
+  color: var(--da-text-body);
+}
+
+.da-caption {
+  font-size: var(--da-text-caption);
+  color: var(--da-text-muted);
+}
+
+.da-result {
+  background: var(--da-surface);
+  border: 1px solid var(--da-border);
+  border-radius: var(--da-radius-card);
+  padding: var(--da-space-l) var(--da-space-xl);
+  display: flex;
+  gap: var(--da-space-m);
+  align-items: flex-start;
+}
+
+.da-result__icon {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+}
+
+.da-result__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--da-space-xs);
+  min-width: 0;
+}
+
+.da-result__meta {
+  font-family: var(--da-font-mono);
+  font-size: var(--da-text-chip-size);
+  color: var(--da-text-muted);
+}
+
+.da-result__question {
+  font-size: var(--da-text-base);
+  font-weight: 600;
+}
+
+.da-result__answers {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: var(--da-text-body-sm);
+}
+
+.da-result__label {
+  color: var(--da-text-muted);
+}
+
+.da-result__why {
+  margin: 0;
+  font-size: var(--da-text-body-sm);
+  color: var(--da-text-body);
+  background: var(--da-bg);
+  border-radius: var(--da-radius-control);
+  padding: 10px var(--da-space-s);
+}
+
+.da-results-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.da-banner--dark {
+  background: var(--da-text);
+  color: var(--da-surface);
+}
+
+.da-banner--dark .da-banner__detail {
+  color: var(--da-border-strong);
+}
+
+.da-button--inverse {
+  background: var(--da-surface);
+  color: var(--da-text);
+  border: 1px solid var(--da-surface);
+  font-weight: 600;
+}
+
+.da-button--inverse:hover {
+  background: var(--da-bg);
+  color: var(--da-text);
+}
+
+/* ===========================================================================
+   Design editor
+   =========================================================================== */
+
+.da-view--wide {
+  max-width: var(--da-width-wide);
+  gap: var(--da-space-xl);
+}
+
+.da-editor {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--da-space-xl);
+  align-items: flex-start;
+}
+
+/* The problem brief sits beside the editor and slides underneath it when there is no
+   room, because the editor is the thing that needs the width. */
+.da-brief {
+  flex: 1 1 320px;
+  max-width: 100%;
+  background: var(--da-surface);
+  border: 1px solid var(--da-border);
+  border-radius: var(--da-radius-card);
+  padding: var(--da-space-xl);
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  box-sizing: border-box;
+}
+
+.da-brief__eyebrow {
+  font-family: var(--da-font-mono);
+  font-size: var(--da-text-chip-size);
+  color: var(--da-text-muted);
+}
+
+.da-brief__title {
+  margin: 0;
+  font-size: var(--da-text-question);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.da-brief__statement {
+  margin: 0;
+  font-size: var(--da-text-body-sm);
+  color: var(--da-text-body);
+  white-space: pre-wrap;
+}
+
+.da-brief__group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.da-brief__heading {
+  margin: 0;
+  font-size: var(--da-text-body-sm);
+  font-weight: 600;
+}
+
+.da-brief__list {
+  margin: 0;
+  padding-left: var(--da-space-l);
+  font-size: var(--da-text-body-sm);
+  color: var(--da-text-body);
+  display: flex;
+  flex-direction: column;
+  gap: var(--da-space-2xs);
+}
+
+.da-brief__scale {
+  display: flex;
+  flex-direction: column;
+  gap: var(--da-space-xs);
+  padding: 14px var(--da-space-m);
+  border-radius: var(--da-radius-option);
+  background: var(--da-bg);
+}
+
+.da-brief__figure {
+  font-family: var(--da-font-mono);
+  font-size: var(--da-text-meta);
+}
+
+/* flex-grow of 999 makes the editor take every spare pixel while still allowing the
+   brief to sit beside it until the viewport is genuinely narrow. */
+.da-editor__main {
+  flex: 999 1 560px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--da-space-l);
+}
+
+.da-panel {
+  background: var(--da-surface);
+  border: 1px solid var(--da-border);
+  border-radius: var(--da-radius-card);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.da-panel__header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--da-space-xs);
+  padding: var(--da-space-s) var(--da-space-m);
+  border-bottom: 1px solid var(--da-border);
+}
+
+.da-panel__label {
+  font-weight: 600;
+  font-size: var(--da-text-body-sm);
+}
+
+.da-panel__label-hint {
+  font-weight: 400;
+  color: var(--da-text-muted);
+}
+
+.da-panel__counter {
+  font-family: var(--da-font-mono);
+  font-size: var(--da-text-caption);
+  color: var(--da-text-muted);
+}
+
+.da-panel__counter--over {
+  color: var(--da-danger);
+  font-weight: 500;
+}
+
+.da-panel__split {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.da-code-area {
+  border: 0;
+  resize: vertical;
+  padding: var(--da-space-m);
+  font-family: var(--da-font-mono);
+  font-size: var(--da-text-meta);
+  line-height: 1.6;
+  color: var(--da-text);
+  background: var(--da-surface);
+  outline-offset: -2px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.da-code-area--design {
+  min-height: 360px;
+}
+
+.da-code-area--diagram {
+  flex: 1 1 280px;
+  width: auto;
+  min-height: 200px;
+  border-right: 1px solid var(--da-border);
+}
+
+.da-preview {
+  flex: 1 1 280px;
+  min-height: 200px;
+  padding: var(--da-space-m);
+  background: var(--da-surface-muted);
+  display: flex;
+  flex-direction: column;
+  gap: var(--da-space-s);
+  overflow: auto;
+}
+
+.da-preview__label {
+  font-size: var(--da-text-caption);
+  color: var(--da-text-muted);
+}
+
+.da-preview__hint {
+  margin: 0;
+  font-size: var(--da-text-meta);
+  color: var(--da-text-muted);
+}
+
+.da-editor__footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--da-space-s);
+}
+
+/* ===========================================================================
+   Design review
+   =========================================================================== */
+
+.da-state {
+  background: var(--da-surface);
+  border: 1px solid var(--da-border);
+  border-radius: var(--da-radius-card);
+  padding: 48px var(--da-gutter);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  text-align: center;
+}
+
+.da-state__title {
+  font-size: var(--da-text-card-title);
+  font-weight: 700;
+}
+
+.da-state__detail {
+  color: var(--da-text-muted);
+  max-width: 460px;
+}
+
+.da-spinner {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--da-radius-pill);
+  border: 4px solid var(--da-border);
+  border-top-color: var(--da-brand);
+  animation: da-spin 900ms linear infinite;
+}
+
+@keyframes da-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Honour a reader who has asked for less motion. */
+@media (prefers-reduced-motion: reduce) {
+  .da-spinner {
+    animation-duration: 3s;
+  }
+}
+
+.da-alert {
+  background: var(--da-danger-bg);
+  border: 1px solid var(--da-danger-border);
+  border-radius: var(--da-radius-card);
+  padding: var(--da-space-xl);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--da-space-m);
+}
+
+.da-alert__title {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--da-danger-text);
+}
+
+.da-alert__detail {
+  color: var(--da-danger-text-soft);
+}
+
+.da-button--danger {
+  background: var(--da-danger);
+  border: 1px solid var(--da-danger);
+  color: var(--da-surface);
+  font-weight: 600;
+}
+
+.da-dimension {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 120px 40px;
+  align-items: center;
+  gap: var(--da-space-s);
+  font-size: var(--da-text-meta);
+}
+
+.da-dimension__score {
+  font-family: var(--da-font-mono);
+  text-align: right;
+}
+
+.da-findings {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--da-space-l);
+}
+
+.da-finding__dot {
+  width: 10px;
+  height: 10px;
+  border-radius: var(--da-radius-pill);
+  flex-shrink: 0;
+  display: inline-block;
+  background: var(--da-dot, var(--da-text-chip));
+}
+
+.da-finding__list {
+  margin: 0;
+  padding-left: var(--da-space-l);
+  display: flex;
+  flex-direction: column;
+  gap: var(--da-space-xs);
+  font-size: var(--da-text-body-sm);
+  color: var(--da-text-body);
+}
+
+.da-details {
+  background: var(--da-surface);
+  border: 1px solid var(--da-border);
+  border-radius: var(--da-radius-card);
+  padding: 0 var(--da-space-xl);
+}
+
+.da-details > summary {
+  cursor: pointer;
+  padding: 18px 0;
+  font-weight: 600;
+  min-height: 24px;
+}
+
+.da-details__content {
+  margin: 0 0 var(--da-space-l);
+  padding: var(--da-space-m);
+  border-radius: var(--da-radius-control);
+  background: var(--da-bg);
+  font-family: var(--da-font-mono);
+  font-size: var(--da-text-caption);
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+.da-provenance {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--da-space-s);
+}
+
+.da-provenance__text {
+  font-family: var(--da-font-mono);
+  font-size: var(--da-text-caption);
+  color: var(--da-text-muted);
+}
+
+.da-provenance__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--da-space-s);
+}
+
+/* ===========================================================================
+   Accounts: sign in, sign up, history
+   These screens have no mockup, so they are assembled from the same tokens and
+   the same card, label and button patterns as the five that do.
+   =========================================================================== */
+
+.da-nav__account {
+  display: flex;
+  align-items: center;
+  gap: var(--da-space-s);
+}
+
+.da-nav__who {
+  font-size: var(--da-text-body-sm);
+  font-weight: 600;
+}
+
+.da-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--da-space-m);
+}
+
+.da-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.da-input {
+  font: inherit;
+  font-size: var(--da-text-base);
+  min-height: var(--da-target);
+  padding: 0 var(--da-space-s);
+  border: 1px solid var(--da-border-strong);
+  border-radius: var(--da-radius-control);
+  background: var(--da-surface);
+  color: var(--da-text);
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.da-input:focus-visible {
+  border-color: var(--da-brand);
+}
+
+.da-alert--inline {
+  padding: var(--da-space-s) var(--da-space-m);
+  justify-content: flex-start;
+}
+
+.da-status--warning {
+  color: var(--da-danger-text);
+  font-weight: 500;
+}
+
+.da-history__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--da-space-s);
+  background: var(--da-surface);
+  border: 1px solid var(--da-border);
+  border-radius: var(--da-radius-card);
+  padding: var(--da-space-m) var(--da-space-l);
+}
+
+.da-history__row > div {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.da-history__outcome {
+  font-family: var(--da-font-mono);
+  font-size: var(--da-text-meta);
+  color: var(--da-text-muted);
+}
+
+/* Admin: a label on the left, a value on the right. */
+.da-status-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--da-space-s);
+  padding: var(--da-space-xs) 0;
+  border-bottom: 1px solid var(--da-border);
+  font-size: var(--da-text-body-sm);
+}
+
+.da-status-row:last-child {
+  border-bottom: 0;
+}

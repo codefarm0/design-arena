@@ -1,0 +1,75 @@
+# Settings that hold in every environment. Anything environment-specific lives in
+# application-local.yaml (Ollama, Docker Compose) or application-cloud.yaml (paid providers).
+spring:
+  application:
+    name: design-arena
+  # Local development is the default, so a fresh clone runs with no flags.
+  profiles:
+    default: local
+  jpa:
+    hibernate:
+      # Flyway owns the schema. Hibernate only checks that the mapping matches it,
+      # so a forgotten migration fails at startup instead of at the first query.
+      ddl-auto: validate
+    # Lazy loading must not leak past the service layer, so no session is held open
+    # for the duration of a request or a Vaadin round trip.
+    open-in-view: false
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+  ai:
+    # Design Arena only ever calls a chat model. Every other model type is switched off
+    # explicitly, because the provider starters auto-configure embedding, image, audio and
+    # moderation clients too, and those demand credentials the app does not have. The
+    # active chat provider is chosen per profile.
+    model:
+      embedding: none
+      image: none
+      moderation: none
+      audio:
+        speech: none
+        transcription: none
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      probes:
+        enabled: true
+  info:
+    env:
+      enabled: true
+    java:
+      enabled: true
+
+  # The timeout for every outbound model call. It lives here, on the HTTP client, rather
+  # than in application code: a read timeout releases the connection and the thread, which
+  # a timeout wrapped around a blocking call does not.
+  http:
+    client:
+      connect-timeout: 10s
+      read-timeout: 120s
+
+designarena:
+  ai:
+    # Set to false to run with no model at all. Every AI feature then takes its
+    # no-model path, which is exactly what it does when a model is unavailable.
+    enabled: true
+    # Extra attempts when a reply does not match the schema we asked for.
+    max-retries: 2
+  limits:
+    # What a free account may spend per calendar month. A design review costs a minute of
+    # a model's time and, on a paid provider, real money; the quiz costs neither and is
+    # not capped.
+    free-reviews-per-month: 3
+
+logging:
+  level:
+    in.codefarm.designarena: INFO

@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<!DOCTYPE suppressions PUBLIC
+    "-//Checkstyle//DTD SuppressionFilter Configuration 1.2//EN"
+    "https://checkstyle.org/dtds/suppressions_1_2.dtd">
+
+<suppressions>
+  <!--
+    Spring entry points look like utility classes because all they hold is main(), but
+    they cannot have a private constructor: Spring instantiates the annotated class as a
+    configuration bean, which requires an accessible no-arg constructor.
+  -->
+  <suppress checks="HideUtilityClassConstructor" files="DesignArenaApplication\.java$"/>
+  <suppress checks="HideUtilityClassConstructor" files="TestDesignArenaApplication\.java$"/>
+</suppressions>
